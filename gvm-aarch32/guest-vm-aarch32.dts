@@ -208,6 +208,14 @@
 					clocks = <&v2m_refclk32khz>, <&v2m_clk24mhz>;
 					clock-names = "wdogclk", "apb_pclk";
 				};
+
+				rtc@1c170000 {
+					compatible = "arm,pl031", "arm,primecell";
+					reg = <0x1c170000 0x1000>;
+					interrupts = <0 4 4>;
+					clocks = <&v2m_clk24mhz>;
+					clock-names = "apb_pclk";
+				};
 			};
 
 			vdev@1,00000000 {
