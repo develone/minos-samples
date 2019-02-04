@@ -1,2 +1,7 @@
 guest-vm.dtb
 gvm/guest-vm.dtb
+aarch32-boot.img
+aarch64-boot.img
+guest-vm-aarch32.dtb
+guest-vm-aarch64.dtb
+
