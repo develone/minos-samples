@@ -207,6 +207,7 @@
 					interrupts = <0 0 4>;
 					clocks = <&v2m_refclk32khz>, <&v2m_clk24mhz>;
 					clock-names = "wdogclk", "apb_pclk";
+					virtual_device;
 				};
 
 				rtc@1c170000 {
@@ -215,6 +216,7 @@
 					interrupts = <0 4 4>;
 					clocks = <&v2m_clk24mhz>;
 					clock-names = "apb_pclk";
+					virtual_device;
 				};
 			};
 
