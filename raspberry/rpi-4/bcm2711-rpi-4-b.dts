@@ -1159,7 +1159,7 @@
 
 		gpu {
 			compatible = "brcm,bcm2835-vc4";
-			status = "disabled";
+			status = "okay";
 			phandle = <0xa8>;
 		};
 
@@ -1379,7 +1379,7 @@
 			reg = <0x7e600000 0x100>;
 			interrupts = <0x0 0x70 0x4>;
 			brcm,firmware = <0x7>;
-			status = "disabled";
+			status = "okay";
 			phandle = <0xb8>;
 		};
 
@@ -1570,7 +1570,7 @@
 			resets = <0x21 0x0>;
 			clocks = <0x3 0x15>;
 			interrupts = <0x0 0x4a 0x4>;
-			status = "disabled";
+			status = "okay";
 			phandle = <0xbf>;
 		};
 	};
