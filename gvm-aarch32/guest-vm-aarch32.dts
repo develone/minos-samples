@@ -143,7 +143,7 @@
 		reg = <0x00000000 0x80000000 0 0x04000000>;
 	};
 
-	gic: interrupt-controller@2f000000 {
+	gic: interrupt-controller@10000000 {
 		#interrupt-cells = <3>;
 		#address-cells = <2>;
 		#size-cells = <2>;
@@ -162,72 +162,48 @@
 	smb {
 		compatible = "simple-bus";
 
-		#address-cells = <2>;
+		#address-cells = <1>;
 		#size-cells = <1>;
-		ranges = <0 0 0 0x00000000 0x10000000>,
-			 <1 0 0 0x10000000 0x10000000>;
+		ranges = <0x0 0x0 0x00000000 0x10000000>,		/* can be mapped to the real hardware for passthough */
+		       <0x10000000 0x0 0x10000000 0x10000000>;
 
-		motherboard {
-			arm,v2m-memory-map = "rs1";
-			compatible = "arm,vexpress,v2m-p1", "simple-bus";
-			#address-cells = <2>; /* SMB chipselect number and offset */
-			#size-cells = <1>;
-			ranges;
+		v2m_clk24mhz: clk24mhz {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <24000000>;
+			clock-output-names = "v2m:clk24mhz";
+		};
 
-			v2m_clk24mhz: clk24mhz {
-				compatible = "fixed-clock";
-				#clock-cells = <0>;
-				clock-frequency = <24000000>;
-				clock-output-names = "v2m:clk24mhz";
-			};
+		v2m_refclk1mhz: refclk1mhz {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <1000000>;
+			clock-output-names = "v2m:refclk1mhz";
+		};
 
-			v2m_refclk1mhz: refclk1mhz {
-				compatible = "fixed-clock";
-				#clock-cells = <0>;
-				clock-frequency = <1000000>;
-				clock-output-names = "v2m:refclk1mhz";
-			};
+		v2m_refclk32khz: refclk32khz {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <32768>;
+			clock-output-names = "v2m:refclk32khz";
+		};
 
-			v2m_refclk32khz: refclk32khz {
-				compatible = "fixed-clock";
-				#clock-cells = <0>;
-				clock-frequency = <32768>;
-				clock-output-names = "v2m:refclk32khz";
-			};
+		wdt@10440000 {
+			compatible = "arm,sp805", "arm,primecell";
+			reg = <0x10440000 0x1000>;
+			interrupts = <0 0 4>;
+			clocks = <&v2m_refclk32khz>, <&v2m_clk24mhz>;
+			clock-names = "wdogclk", "apb_pclk";
+			virtual_device;
+		};
 
-			vdev_host@0,00000000 {
-				compatible = "arm,amba-bus", "simple-bus";
-				#address-cells = <1>;
-				#size-cells = <1>;
-				ranges = <0 0 0 0x10000000>;
-
-			};
-
-			vdev@1,00000000 {
-				compatible = "arm,amba-bus", "simple-bus";
-				#address-cells = <1>;
-				#size-cells = <1>;
-				ranges = <0 1 0 0x10000000>;
-
-				wdt@1c0f0000 {
-					compatible = "arm,sp805", "arm,primecell";
-					reg = <0x440000 0x1000>;
-					interrupts = <0 0 4>;
-					clocks = <&v2m_refclk32khz>, <&v2m_clk24mhz>;
-					clock-names = "wdogclk", "apb_pclk";
-					virtual_device;
-				};
-
-				rtc@1c170000 {
-					compatible = "arm,pl031", "arm,primecell";
-					reg = <0x441000 0x1000>;
-					interrupts = <0 1 4>;
-					clocks = <&v2m_clk24mhz>;
-					clock-names = "apb_pclk";
-					virtual_device;
-				};
-
-			};
+		rtc@10441000 {
+			compatible = "arm,pl031", "arm,primecell";
+			reg = <0x10441000 0x1000>;
+			interrupts = <0 1 4>;
+			clocks = <&v2m_clk24mhz>;
+			clock-names = "apb_pclk";
+			virtual_device;
 		};
 	};
 };
